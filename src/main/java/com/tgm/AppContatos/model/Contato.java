@@ -1,5 +1,6 @@
 package com.tgm.AppContatos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tgm.AppContatos.enums.TipoContato;
 
 import jakarta.persistence.Column;
@@ -12,6 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "tbl_contato")
@@ -21,15 +24,19 @@ public class Contato {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotNull
 	@Enumerated(EnumType.ORDINAL)
 	@Column(nullable = false)
 	private TipoContato tipoContato;
 	
+	@NotNull
+	@NotBlank
 	@Column(nullable = false)
 	private String contato;
 	
 	@ManyToOne
 	@JoinColumn(name = "pessoa_id")
+	@JsonIgnoreProperties("contatos")
 	private Pessoa pessoa;
 
 	public Contato() {}

@@ -2,6 +2,8 @@ package com.tgm.AppContatos.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,6 +43,7 @@ public class Pessoa {
 	private String uf;
 	
 	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnoreProperties("pessoa")
 	private List<Contato> contatos;
 
 	public Pessoa() {}
