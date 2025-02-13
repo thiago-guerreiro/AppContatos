@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
+import com.tgm.AppContatos.dto.PessoaDTO;
 import com.tgm.AppContatos.model.Pessoa;
 import com.tgm.AppContatos.service.PessoaService;
 
@@ -42,6 +44,18 @@ public class PessoaController {
 	        Optional<Pessoa> pessoa = pessoaService.findById(id);
 	        return pessoa.map(ResponseEntity::ok)
 	                     .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+	    } catch (RuntimeException e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	    }
+	}
+
+	@GetMapping("/maladireta/{id}")
+	public ResponseEntity<PessoaDTO> findPessoaMalaDireta(@PathVariable @Positive Long id) {
+	    try {
+	        PessoaDTO pessoaDTO = pessoaService.findPessoaMalaDireta(id);
+	        return ResponseEntity.ok(pessoaDTO);
+	    } catch (ResponseStatusException e) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 	    } catch (RuntimeException e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	    }

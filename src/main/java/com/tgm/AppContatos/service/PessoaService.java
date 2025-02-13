@@ -3,8 +3,11 @@ package com.tgm.AppContatos.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import com.tgm.AppContatos.dto.PessoaDTO;
 import com.tgm.AppContatos.model.Pessoa;
 import com.tgm.AppContatos.repository.PessoaRepository;
 
@@ -33,6 +36,16 @@ public class PessoaService {
 	        return pessoaRepository.findById(id);
 	    } catch (Exception e) {
 	        throw new RuntimeException(e.getMessage());
+	    }
+	}
+
+	public PessoaDTO findPessoaMalaDireta(Long id) {
+	    try {
+	        Pessoa pessoa = pessoaRepository.findById(id)
+	                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pessoa não encontrada com ID: " + id));
+	        return PessoaDTO.from(pessoa);
+	    } catch (Exception e) {
+	    	throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Erro ao obter dados de mala direta: " + e.getMessage());
 	    }
 	}
 
