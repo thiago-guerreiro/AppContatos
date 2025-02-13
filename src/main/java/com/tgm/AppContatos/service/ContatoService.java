@@ -1,5 +1,6 @@
 package com.tgm.AppContatos.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,4 +47,12 @@ public class ContatoService {
         }
     }
 
+	public List<Contato> findAllByPessoaId(Long pessoaId) {
+        try {
+        	return contatoRepository.findAllByPessoaId(pessoaId);
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage());
+		}
+    }
+	
 }

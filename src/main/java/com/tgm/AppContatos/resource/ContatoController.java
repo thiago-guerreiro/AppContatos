@@ -1,5 +1,6 @@
 package com.tgm.AppContatos.resource;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,4 +50,17 @@ public class ContatoController {
 		}
 	 }
 
+	 @GetMapping("/pessoa/{idPessoa}")
+	 public ResponseEntity<List<Contato>> getContatosByPessoaId(@PathVariable @Positive Long idPessoa) {    
+	     try {
+	         List<Contato> contatos = contatoService.findAllByPessoaId(idPessoa);
+	         if (contatos.isEmpty()) {
+	             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	         }
+	         return ResponseEntity.ok(contatos);
+	     } catch (RuntimeException e) {
+	         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	     }
+	 }
+	 
 }
