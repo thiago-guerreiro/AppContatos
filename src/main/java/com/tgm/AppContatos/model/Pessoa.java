@@ -10,6 +10,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "tbl_pessoa")
@@ -19,6 +22,8 @@ public class Pessoa {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotNull
+	@NotBlank
 	@Column(nullable = false)
 	private String nome;
 	
@@ -32,6 +37,7 @@ public class Pessoa {
 	private String cidade;
 	
 	@Column(nullable = true)
+	@Size(min = 2, max = 2)
 	private String uf;
 	
 	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
