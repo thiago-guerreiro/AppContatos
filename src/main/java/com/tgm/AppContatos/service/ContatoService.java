@@ -54,5 +54,13 @@ public class ContatoService {
 			throw new RuntimeException(e.getMessage());
 		}
     }
+
+	public void deleteById(Long id) {
+		try {
+			contatoRepository.deleteById(id);
+		} catch (Exception e) {
+			throw new RuntimeException(e.getMessage());
+		}
+    }
 	
 }
