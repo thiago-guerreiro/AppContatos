@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,5 +63,21 @@ public class ContatoController {
 	         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	     }
 	 }
-	 
+
+	 @PutMapping("/{id}")
+	 public ResponseEntity<Contato> updateContato(@PathVariable @Positive Long id, @RequestBody Contato contato) {
+		 try {
+			 if (contatoService.findById(id).isEmpty()) {
+				 return ResponseEntity.notFound().build();
+			 }
+			 contato.setId(id);
+			 Contato updatedContato = contatoService.save(contato);
+			 return ResponseEntity.ok(updatedContato);
+		 } catch (IllegalArgumentException e) {
+			 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		 } catch (RuntimeException e) {
+			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		 } 
+	 }
+ 
 }
