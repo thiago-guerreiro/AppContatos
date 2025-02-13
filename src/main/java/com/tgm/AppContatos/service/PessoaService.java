@@ -1,5 +1,6 @@
 package com.tgm.AppContatos.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,22 @@ public class PessoaService {
 	        return PessoaDTO.from(pessoa);
 	    } catch (Exception e) {
 	    	throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Erro ao obter dados de mala direta: " + e.getMessage());
+	    }
+	}
+
+	public List<Pessoa> findAll() {
+	    try {
+	        return pessoaRepository.findAll();
+	    } catch (Exception e) {
+	        throw new RuntimeException(e.getMessage());
+	    }
+	}
+
+	public void deleteById(Long id) {
+	    try {
+	    	pessoaRepository.deleteById(id);
+	    } catch (Exception e) {
+	        throw new RuntimeException(e.getMessage());
 	    }
 	}
 

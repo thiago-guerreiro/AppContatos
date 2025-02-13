@@ -1,13 +1,16 @@
 package com.tgm.AppContatos.resource;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,4 +64,45 @@ public class PessoaController {
 	    }
 	}
 
+	@GetMapping
+	public ResponseEntity<List<Pessoa>> findAllPessoas() {
+	    try {
+	        List<Pessoa> pessoas = pessoaService.findAll();
+	        return ResponseEntity.ok(pessoas);
+	    } catch (ResponseStatusException e) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	    } catch (RuntimeException e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	    }
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<Pessoa> updatePessoa(@PathVariable @Positive Long id, @RequestBody Pessoa pessoa) {
+	    try {
+	        if (pessoaService.findById(id).isEmpty()) {
+	            return ResponseEntity.notFound().build();
+	        }
+	        pessoa.setId(id);
+	        Pessoa updatedPessoa = pessoaService.save(pessoa);
+	        return ResponseEntity.ok(updatedPessoa);
+	    } catch (IllegalArgumentException e) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+	    } catch (RuntimeException e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	    }
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deletePessoa(@PathVariable @Positive Long id) {
+	    try {
+	    	if (!pessoaService.findById(id).isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+            pessoaService.deleteById(id);
+            return ResponseEntity.noContent().build();
+	    } catch (RuntimeException e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
+	}
+	
 }
