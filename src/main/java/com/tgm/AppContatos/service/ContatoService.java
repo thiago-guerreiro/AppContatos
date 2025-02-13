@@ -38,4 +38,12 @@ public class ContatoService {
 		return contato;
 	}
 
+	public Optional<Contato> findById(Long id) {
+        try {
+            return contatoRepository.findById(id);
+        } catch (Exception e) {
+        	throw new RuntimeException(e.getMessage());
+        }
+    }
+
 }
