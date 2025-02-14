@@ -20,6 +20,7 @@ import com.tgm.AppContatos.dto.PessoaDTO;
 import com.tgm.AppContatos.model.Pessoa;
 import com.tgm.AppContatos.service.PessoaService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 
@@ -29,7 +30,9 @@ public class PessoaController {
 	
 	@Autowired
     private PessoaService pessoaService;
-
+	
+	@Operation(summary = "Cria uma nova pessoa", 
+			description = "Este endpoint cria uma nova pessoa e salva no banco de dados")
 	@PostMapping
 	public ResponseEntity<Pessoa> salvarPessoa(@RequestBody @Valid Pessoa pessoa) {
 	    try {
@@ -40,7 +43,9 @@ public class PessoaController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	    }
 	}
-
+	
+	@Operation(summary = "Retorna os dados de uma pessoa por ID", 
+			description = "Este endpoint retorna os dados de uma pessoa através do seu ID")
 	@GetMapping("/{id}")
 	public ResponseEntity<Pessoa> findPessoaById(@PathVariable @Positive Long id) {
 	    try {
@@ -51,7 +56,9 @@ public class PessoaController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	    }
 	}
-
+	
+	@Operation(summary = "Retorna os dados de uma pessoa por ID para mala direta", 
+			description = "Este endpoint retorna os dados de uma pessoa para mala direta através do seu ID")
 	@GetMapping("/maladireta/{id}")
 	public ResponseEntity<PessoaDTO> findPessoaMalaDireta(@PathVariable @Positive Long id) {
 	    try {
@@ -63,7 +70,9 @@ public class PessoaController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	    }
 	}
-
+	
+	@Operation(summary = "Lista todas as pessoas", 
+			description = "Este endpoint retorna todas as pessoas cadastradas no sistema")
 	@GetMapping
 	public ResponseEntity<List<Pessoa>> findAllPessoas() {
 	    try {
@@ -75,7 +84,9 @@ public class PessoaController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	    }
 	}
-
+	
+	@Operation(summary = "Atualiza uma pessoa existente", 
+			description = "Este endpoint permite atualizar os dados de uma pessoa")
 	@PutMapping("/{id}")
 	public ResponseEntity<Pessoa> updatePessoa(@PathVariable @Positive Long id, @RequestBody Pessoa pessoa) {
 	    try {
@@ -91,7 +102,9 @@ public class PessoaController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	    }
 	}
-
+	
+	@Operation(summary = "Remove uma pessoa por ID", 
+			description = "Este endpoint remove uma pessoa do sistema pelo seu ID")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletePessoa(@PathVariable @Positive Long id) {
 	    try {

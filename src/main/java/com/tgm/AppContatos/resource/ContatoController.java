@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tgm.AppContatos.model.Contato;
 import com.tgm.AppContatos.service.ContatoService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 
@@ -26,8 +27,10 @@ import jakarta.validation.constraints.Positive;
 public class ContatoController {
 	
 	@Autowired
-    private ContatoService contatoService;
-
+	private ContatoService contatoService;
+	
+	 @Operation(summary = "Adiciona um novo contato a uma pessoa", 
+			description = "Este endpoint permite adicionar um novo contato a uma pessoa existente")
 	 @PostMapping
 	 public ResponseEntity<Contato> salvarContato(@RequestBody @Valid Contato contato) {
 		 try {
@@ -41,6 +44,8 @@ public class ContatoController {
 	    }
 	 }
 
+	 @Operation(summary = "Retorna os dados de um contato por ID", 
+				description = "Este endpoint retorna os dados de um contato através do seu ID")
 	 @GetMapping("/{id}")
 	 public ResponseEntity<Contato> getContatoById(@PathVariable @Positive Long id) {
 		 try {
@@ -52,6 +57,8 @@ public class ContatoController {
 		}
 	 }
 
+	 @Operation(summary = "Lista todos os contatos de uma pessoa", 
+				description = "Este endpoint retorna todos os contatos de uma pessoa através do ID da pessoa")
 	 @GetMapping("/pessoa/{idPessoa}")
 	 public ResponseEntity<List<Contato>> getContatosByPessoaId(@PathVariable @Positive Long idPessoa) {    
 	     try {
@@ -65,6 +72,8 @@ public class ContatoController {
 	     }
 	 }
 
+	 @Operation(summary = "Atualiza um Contato existente", 
+				description = "Este endpoint permite atualizar os dados de um contato")
 	 @PutMapping("/{id}")
 	 public ResponseEntity<Contato> updateContato(@PathVariable @Positive Long id, @RequestBody Contato contato) {
 		 try {
@@ -81,6 +90,8 @@ public class ContatoController {
 		 } 
 	 }
 
+	 @Operation(summary = "Remove um contato por ID", 
+				description = "Este endpoint remove um contato do sistema pelo seu ID")
 	 @DeleteMapping("/{id}")
 	 public ResponseEntity<Void> deleteContato(@PathVariable @Positive Long id) {
 		 try {
