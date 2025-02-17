@@ -1,9 +1,10 @@
 package com.tgm.AppContatos.resource;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -72,18 +73,24 @@ public class PessoaController {
 	}
 	
 	@Operation(summary = "Lista todas as pessoas", 
-			description = "Este endpoint retorna todas as pessoas cadastradas no sistema")
+		    description = "Este endpoint retorna uma lista paginada de todas as pessoas cadastradas no sistema. " +
+		                  "Você pode usar os parâmetros de consulta page, size e sort para controlar a paginação e ordenação dos resultados. " +
+		                  "Se nenhum parâmetro de paginação for fornecido, a página padrão será usada")
 	@GetMapping
-	public ResponseEntity<List<Pessoa>> findAllPessoas() {
-	    try {
-	        List<Pessoa> pessoas = pessoaService.findAll();
+	public ResponseEntity<Page<Pessoa>> findAllPessoas(Pageable pageable) {
+		try { 
+			Page<Pessoa> pessoas = pessoaService.findAll(pageable);
+			if (pessoas.isEmpty()) {
+	            return ResponseEntity.noContent().build();
+	        }
 	        return ResponseEntity.ok(pessoas);
 	    } catch (ResponseStatusException e) {
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Page.empty());
 	    } catch (RuntimeException e) {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Page.empty());
 	    }
 	}
+	
 	
 	@Operation(summary = "Atualiza uma pessoa existente", 
 			description = "Este endpoint permite atualizar os dados de uma pessoa")
